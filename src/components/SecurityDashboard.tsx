@@ -5,6 +5,8 @@ import { Button } from './ui/button'
 import { Progress } from './ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
 import { ScrollArea } from './ui/scroll-area'
+import { ThreatMap } from './ThreatMap'
+import { SecurityAlerts } from './SecurityAlerts'
 import { 
   Shield, 
   AlertTriangle, 
@@ -19,7 +21,11 @@ import {
   Clock,
   CheckCircle,
   XCircle,
-  AlertCircle
+  AlertCircle,
+  Bell,
+  BarChart3,
+  Settings,
+  Download
 } from 'lucide-react'
 
 interface SecurityDashboardProps {
@@ -266,11 +272,13 @@ export function SecurityDashboard({ user, blink }: SecurityDashboardProps) {
 
         {/* Main Dashboard */}
         <Tabs defaultValue="threats" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 bg-card/50 backdrop-blur-sm">
+          <TabsList className="grid w-full grid-cols-6 bg-card/50 backdrop-blur-sm">
             <TabsTrigger value="threats">Threat Monitor</TabsTrigger>
             <TabsTrigger value="network">Network Activity</TabsTrigger>
             <TabsTrigger value="scanner">AI Scanner</TabsTrigger>
-            <TabsTrigger value="controls">Protection Controls</TabsTrigger>
+            <TabsTrigger value="alerts">Security Alerts</TabsTrigger>
+            <TabsTrigger value="map">Threat Map</TabsTrigger>
+            <TabsTrigger value="controls">Controls</TabsTrigger>
           </TabsList>
 
           <TabsContent value="threats" className="space-y-6">
@@ -435,11 +443,22 @@ export function SecurityDashboard({ user, blink }: SecurityDashboardProps) {
             </Card>
           </TabsContent>
 
+          <TabsContent value="alerts" className="space-y-6">
+            <SecurityAlerts />
+          </TabsContent>
+
+          <TabsContent value="map" className="space-y-6">
+            <ThreatMap />
+          </TabsContent>
+
           <TabsContent value="controls" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <Card className="bg-card/50 backdrop-blur-sm border-border">
                 <CardHeader>
-                  <CardTitle>Emergency Controls</CardTitle>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Lock className="w-5 h-5 text-accent" />
+                    <span>Emergency Controls</span>
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <Button
@@ -462,12 +481,52 @@ export function SecurityDashboard({ user, blink }: SecurityDashboardProps) {
                     <Activity className="w-4 h-4 mr-2" />
                     Reset Firewall
                   </Button>
+
+                  <Button variant="outline" className="w-full">
+                    <Download className="w-4 h-4 mr-2" />
+                    Export Logs
+                  </Button>
                 </CardContent>
               </Card>
 
               <Card className="bg-card/50 backdrop-blur-sm border-border">
                 <CardHeader>
-                  <CardTitle>AI Recommendations</CardTitle>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Settings className="w-5 h-5 text-accent" />
+                    <span>System Settings</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">Auto-block threats</span>
+                    <Button variant="outline" size="sm">
+                      {protectionEnabled ? 'ON' : 'OFF'}
+                    </Button>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">Real-time monitoring</span>
+                    <Button variant="outline" size="sm">ON</Button>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">Email notifications</span>
+                    <Button variant="outline" size="sm">ON</Button>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm">Quarantine mode</span>
+                    <Button variant="outline" size="sm">OFF</Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-card/50 backdrop-blur-sm border-border">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <BarChart3 className="w-5 h-5 text-accent" />
+                    <span>AI Recommendations</span>
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
